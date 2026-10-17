@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>English Speaking Simulator</title>
+<style>
+:root{--bg:#f4f6fb;--card:#fff;--ink:#172033;--muted:#697386;--accent:#4f46e5;--accent2:#eef2ff;--line:#e5e7ef;--green:#13845b;--orange:#b45309}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+button,select,input{font:inherit}button{cursor:pointer;border:0;border-radius:12px;padding:11px 15px;font-weight:650;background:var(--accent);color:white}button.secondary{background:#eef0f6;color:#293248}button.ghost{background:transparent;color:var(--accent);border:1px solid var(--line)}button:disabled{opacity:.45;cursor:not-allowed}
+header{background:#171b35;color:white;padding:22px max(18px,calc((100% - 1100px)/2));display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}header h1{margin:0;font-size:1.35rem}header p{margin:4px 0 0;color:#c9cce0;font-size:.92rem}.pill{border:1px solid #454a6d;border-radius:99px;padding:6px 11px;font-size:.85rem}
+main{max-width:1100px;margin:24px auto;padding:0 16px 42px}.welcome{background:linear-gradient(120deg,#4f46e5,#7771f0);color:white;padding:25px;border-radius:20px;display:flex;justify-content:space-between;gap:18px;align-items:center;flex-wrap:wrap}.welcome h2{margin:0 0 7px;font-size:1.55rem}.welcome p{margin:0;color:#efefff;max-width:650px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:17px 0}.stat,.panel,.scenario{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:17px}.stat small{color:var(--muted)}.stat strong{display:block;font-size:1.55rem;margin-top:3px}.section-title{display:flex;align-items:end;justify-content:space-between;gap:12px;margin:25px 0 12px}.section-title h2{font-size:1.2rem;margin:0}.section-title p{margin:0;color:var(--muted);font-size:.9rem}.scenarios{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}.scenario{display:flex;flex-direction:column;gap:9px}.emoji{font-size:1.8rem}.scenario h3{margin:0;font-size:1.05rem}.scenario p{margin:0;color:var(--muted);font-size:.91rem;flex:1}.tag{font-size:.78rem;background:var(--accent2);color:#4338ca;border-radius:8px;padding:4px 8px;align-self:flex-start}.scenario button{margin-top:4px}.practice{display:none;margin-top:20px}.practice.active{display:block}.practice-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.practice-head h2{margin:0}.chat{margin-top:14px;display:flex;flex-direction:column;gap:12px;min-height:170px;max-height:390px;overflow:auto;padding:15px;background:#f8f9fd;border:1px solid var(--line);border-radius:16px}.bubble{max-width:86%;padding:12px 14px;border-radius:15px;white-space:pre-wrap}.bubble.ai{background:white;border:1px solid var(--line);align-self:flex-start}.bubble.user{background:#e8eaff;align-self:flex-end}.bubble .who{font-size:.75rem;font-weight:750;color:var(--muted);margin-bottom:4px}.reply-area{display:grid;grid-template-columns:1fr auto;gap:9px;margin-top:12px}.reply-area input{min-width:0;padding:13px;border:1px solid #d7dbea;border-radius:12px;background:white}.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.feedback{margin-top:13px;padding:14px;border-radius:13px;background:#fff8e9;border:1px solid #f4dfae;display:none}.feedback.show{display:block}.feedback strong{display:block;margin-bottom:4px}.hint{color:var(--muted);font-size:.9rem;margin-top:10px}.progressbar{height:9px;background:#e9eaf3;border-radius:99px;overflow:hidden;margin-top:8px}.progressbar span{display:block;height:100%;background:var(--accent);width:0;transition:width .2s}.footer-note{color:var(--muted);font-size:.84rem;margin-top:22px}.toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:#172033;color:white;padding:10px 15px;border-radius:12px;display:none;max-width:90%;z-index:4}.toast.show{display:block}
+@media(max-width:760px){.scenarios{grid-template-columns:repeat(2,1fr)}.stats{grid-template-columns:repeat(3,1fr)}.stat{padding:12px}.stat strong{font-size:1.25rem}}@media(max-width:520px){.scenarios{grid-template-columns:1fr}.welcome{padding:20px}.reply-area{grid-template-columns:1fr}.reply-area button{width:100%}.stats{gap:7px}.stat small{font-size:.75rem}.stat strong{font-size:1.15rem}}
+</style>
+</head>
+<body>
+<header>
+  <div><h1>🗣️ English Speaking Simulator</h1><p>Latihan sedikit demi sedikit. Speak, learn, repeat.</p></div>
+  <span class="pill">Level 1 · Beginner</span>
+</header>
+<main>
+  <section class="welcome">
+    <div><h2>Hey! Ready to practice? 👋</h2><p>Latihan percakapan sehari-hari dengan skenario, mikrofon, suara karakter, petunjuk bahasa Indonesia, dan XP. Tidak perlu akun atau API key.</p></div>
+    <button id="continueBtn">Mulai latihan →</button>
+  </section>
+  <section class="stats">
+    <div class="stat"><small>⭐ Total XP</small><strong id="xp">0</strong></div>
+    <div class="stat"><small>✅ Skenario selesai</small><strong id="completed">0</strong></div>
+    <div class="stat"><small>🔥 Latihan hari ini</small><strong id="today">0</strong></div>
+  </section>
+  <div class="section-title"><div><h2>Pilih skenario</h2><p>Pilih situasi lalu jawab dalam bahasa Inggris.</p></div></div>
+  <section class="scenarios" id="scenarioList"></section>
+
+  <section class="practice" id="practice">
+    <div class="panel">
+      <div class="practice-head"><div><div class="tag" id="scenarioTag">ROLEPLAY</div><h2 id="scenarioTitle" style="margin-top:8px">Practice</h2></div><button class="secondary" id="backBtn">← Semua skenario</button></div>
+      <p id="scenarioIntro" class="hint"></p>
+      <div class="chat" id="chat" aria-live="polite"></div>
+      <div class="reply-area"><input id="answer" placeholder="Ketik jawaban bahasa Inggris..." autocomplete="off"><button id="sendBtn">Kirim ↗</button></div>
+      <div class="controls">
+        <button id="micBtn" class="secondary">🎙️ Bicara</button>
+        <button id="speakBtn" class="secondary">🔊 Dengarkan ulang</button>
+        <button id="hintBtn" class="ghost">💡 Petunjuk</button>
+        <button id="repeatBtn" class="ghost">↻ Ulang skenario</button>
+      </div>
+      <div class="feedback" id="feedback"></div>
+      <p class="hint" id="micStatus">Tips: coba jawab dengan satu kalimat pendek. Kalau mikrofon tidak didukung, gunakan kotak teks.</p>
+      <div style="margin-top:16px"><div style="display:flex;justify-content:space-between;gap:10px"><small>Progres skenario</small><small id="stepText">0 / 4</small></div><div class="progressbar"><span id="progress"></span></div></div>
+    </div>
+  </section>
+  <p class="footer-note">Privasi: progres disimpan di browser perangkat ini. Fitur pengenalan suara bergantung pada dukungan browser dan mungkin memerlukan koneksi internet. Suara balasan menggunakan text-to-speech bawaan browser. Ini versi latihan berbasis skenario, bukan AI bebas.</p>
+</main>
+<div class="toast" id="toast"></div>
+<script>
+const scenarios = [
+ {id:'cafe',emoji:'☕',title:'At the Coffee Shop',desc:'Pesan minuman dan jawab pertanyaan barista.',tag:'Mudah · 4 langkah',intro:'You are at a coffee shop. I am the barista. Try to answer in English.',turns:[
+  {q:'Hi there! What would you like to drink?',hint:'Saya ingin kopi, tolong.',answers:['i would like a coffee please','i want a coffee','can i have a coffee'],model:"I'd like a coffee, please.",tip:"Gunakan “I'd like...” atau “Can I have...” untuk memesan dengan sopan."},
+  {q:'Sure! Would you like it hot or iced?',hint:'Saya mau yang dingin.',answers:['iced please','i would like it iced','cold please'],model:"Iced, please.",tip:"Jawaban singkat sudah cukup. “Iced, please” terdengar alami."},
+  {q:'What size would you like: small, medium, or large?',hint:'Ukuran sedang, tolong.',answers:['medium please','i would like a medium','a medium please'],model:"A medium, please.",tip:"Untuk ukuran, kamu bisa langsung menjawab “A medium, please.”"},
+  {q:'Great! That will be four dollars. Anything else?',hint:'Tidak, terima kasih.',answers:['no thank you','no thanks','that is all thank you','that is all'],model:"No, thank you. That's all.",tip:"“That's all, thank you” berarti cukup itu saja."}
+ ]},
+ {id:'introduce',emoji:'🤝',title:'Meet Someone New',desc:'Berkenalan dan bertanya nama.',tag:'Mudah · 4 langkah',intro:'You are meeting someone at a friendly event. I will start the conversation.',turns:[
+  {q:'Hi! My name is Alex. What is your name?',hint:'Nama saya ...',answers:['my name is','i am','i’m'],model:"My name is ...",tip:"Kamu juga bisa bilang “I'm [nama].”"},
+  {q:'Nice to meet you! Where are you from?',hint:'Saya berasal dari Indonesia.',answers:['i am from indonesia','i’m from indonesia','indonesia'],model:"I'm from Indonesia.",tip:"Pola sederhana: “I'm from + negara/kota.”"},
+  {q:'That sounds nice. What do you do?',hint:'Saya bekerja sebagai ... / Saya seorang pelajar.',answers:['i work as','i am a student','i work in','i am working'],model:"I'm a student. / I work as a ...",tip:"“What do you do?” biasanya menanyakan pekerjaan atau kegiatan utama."},
+  {q:'What do you like to do in your free time?',hint:'Saya suka mendengarkan musik.',answers:['i like listening to music','i like music','i enjoy listening to music','i like playing games'],model:"I like listening to music.",tip:"Setelah “I like”, kamu bisa memakai kata benda atau kata kerja berakhiran -ing."}
+ ]},
+ {id:'shopping',emoji:'🛍️',title:'At a Store',desc:'Bertanya harga dan memilih barang.',tag:'Mudah · 4 langkah',intro:'You are shopping in a store. I am the shop assistant.',turns:[
+  {q:'Hello! Can I help you find anything?',hint:'Ya, saya sedang mencari kaus.',answers:['yes i am looking for a t shirt','i am looking for a shirt','yes please'],model:"Yes, I'm looking for a T-shirt.",tip:"“I'm looking for...” berarti saya sedang mencari..."},
+  {q:'What color would you like?',hint:'Saya mau warna hitam.',answers:['black please','i would like black','i want a black one'],model:"Black, please.",tip:"Jawaban pendek seperti “Black, please” sudah benar untuk konteks ini."},
+  {q:'What size do you need?',hint:'Ukuran medium.',answers:['medium','medium please','a medium please'],model:"Medium, please.",tip:"Sebutkan ukuran lalu tambahkan “please” agar terdengar sopan."},
+  {q:'It costs ten dollars. Would you like to buy it?',hint:'Ya, saya mau membelinya.',answers:['yes i would','yes please','i will take it','yes i would like to buy it'],model:"Yes, I'll take it, please.",tip:"“I'll take it” adalah cara alami mengatakan kamu jadi membeli barang itu."}
+ ]},
+ {id:'directions',emoji:'🗺️',title:'Ask for Directions',desc:'Meminta bantuan menemukan tempat.',tag:'Mudah · 4 langkah',intro:'You are in a new city. I am a friendly person you ask for help.',turns:[
+  {q:'Hello! You look a little lost. Can I help?',hint:'Ya, bisakah Anda membantu saya?',answers:['yes can you help me','yes please','yes i need help'],model:"Yes, could you help me, please?",tip:"“Could you help me?” terdengar sopan saat meminta bantuan."},
+  {q:'Sure. Where do you want to go?',hint:'Saya ingin pergi ke stasiun.',answers:['i want to go to the station','where is the station','i need to go to the station'],model:"I want to go to the station.",tip:"Gunakan “I want to go to...” untuk menyebut tujuan."},
+  {q:'The station is near the bank. Do you know where the bank is?',hint:'Tidak, saya tidak tahu.',answers:['no i do not','no i don’t','no i do not know','not really'],model:"No, I don't know where it is.",tip:"“I don't know” berarti saya tidak tahu."},
+  {q:'No problem. I can show you on the map.',hint:'Terima kasih banyak!',answers:['thank you very much','thanks a lot','thank you'],model:"Thank you so much!",tip:"“Thank you so much” adalah cara hangat untuk mengucapkan terima kasih."}
+ ]},
+ {id:'restaurant',emoji:'🍽️',title:'At a Restaurant',desc:'Memesan makanan dan minuman.',tag:'Mudah · 4 langkah',intro:'You are at a restaurant. I am your server.',turns:[
+  {q:'Good evening! Are you ready to order?',hint:'Ya, saya siap memesan.',answers:['yes i am ready','yes i am ready to order','yes please'],model:"Yes, I'm ready to order.",tip:"“I'm ready to order” berarti saya siap memesan."},
+  {q:'What would you like to eat?',hint:'Saya mau ayam dan nasi.',answers:['i would like chicken and rice','chicken and rice please','i want chicken and rice'],model:"I'd like chicken and rice, please.",tip:"“I'd like...” terdengar sopan saat memesan makanan."},
+  {q:'Would you like something to drink?',hint:'Air putih saja, tolong.',answers:['water please','just water please','i would like water'],model:"Just water, please.",tip:"“Just water, please” berarti air putih saja."},
+  {q:'Certainly. Is that everything?',hint:'Ya, itu saja.',answers:['yes that is all','yes that is everything','yes thank you','that is all'],model:"Yes, that's everything. Thank you.",tip:"“That's everything” atau “That's all” berarti itu saja."}
+ ]},
+ {id:'smalltalk',emoji:'🌤️',title:'Small Talk',desc:'Ngobrol singkat tentang hari dan hobi.',tag:'Mudah · 4 langkah',intro:'We are chatting casually. Try to answer in one or two simple sentences.',turns:[
+  {q:'Hey! How are you today?',hint:'Saya baik-baik saja, terima kasih.',answers:['i am fine thank you','i’m good thanks','i am doing well','pretty good'],model:"I'm good, thanks! How about you?",tip:"Setelah menjawab, kamu bisa balik bertanya “How about you?”"},
+  {q:'Good to hear! How was your day?',hint:'Hari saya menyenangkan.',answers:['my day was good','it was a good day','my day was fine','it was great'],model:"My day was good.",tip:"Untuk hari yang sudah berjalan, kamu bisa menggunakan “was”."},
+  {q:'What do you usually do on weekends?',hint:'Saya biasanya menonton film.',answers:['i usually watch movies','i watch movies','i usually play games','i usually stay at home'],model:"I usually watch movies on weekends.",tip:"“Usually” berarti biasanya dan sering dipakai untuk rutinitas."},
+  {q:'That sounds fun! What kind of movies do you like?',hint:'Saya suka film aksi.',answers:['i like action movies','i like comedy movies','i like horror movies','i like action films'],model:"I like action movies.",tip:"Kamu bisa menambahkan alasan: “because they are exciting.”"}
+ ]}
+];
+const $=id=>document.getElementById(id);
+let current=null,step=0,lastAI='',recognition=null,sessionCorrect=0;
+const todayKey=new Date().toISOString().slice(0,10);
+function loadStats(){try{return JSON.parse(localStorage.getItem('ess_stats')||'{}')}catch{return {}}}
+function saveStats(s){localStorage.setItem('ess_stats',JSON.stringify(s))}
+function renderStats(){let s=loadStats();$('xp').textContent=s.xp||0;$('completed').textContent=(s.completed||[]).length;$('today').textContent=s.day===todayKey?(s.today||0):0}
+function renderScenarios(){$('scenarioList').innerHTML=scenarios.map(s=>`<article class="scenario"><div class="emoji">${s.emoji}</div><span class="tag">${s.tag}</span><h3>${s.title}</h3><p>${s.desc}</p><button onclick="startScenario('${s.id}')">Mulai latihan →</button></article>`).join('')}
+function bubble(who,text){let el=document.createElement('div');el.className='bubble '+(who==='You'?'user':'ai');let label=document.createElement('div');label.className='who';label.textContent=who==='You'?'YOU':'SIMULATOR';let body=document.createElement('div');body.textContent=text;el.append(label,body);$('chat').appendChild(el);$('chat').scrollTop=$('chat').scrollHeight}
+function say(text){if(!('speechSynthesis'in window)){toast('Browser ini belum mendukung suara.');return}speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(text);u.lang='en-US';u.rate=.88;let voices=speechSynthesis.getVoices();let v=voices.find(x=>x.lang&&x.lang.toLowerCase().startsWith('en-us'))||voices.find(x=>x.lang&&x.lang.toLowerCase().startsWith('en'));if(v)u.voice=v;speechSynthesis.speak(u)}
+function startScenario(id){current=scenarios.find(x=>x.id===id);step=0;sessionCorrect=0;$('practice').classList.add('active');$('scenarioTitle').textContent=current.title;$('scenarioTag').textContent=current.tag;$('scenarioIntro').textContent=current.intro;$('chat').innerHTML='';$('feedback').className='feedback';$('feedback').innerHTML='';$('answer').value='';$('micStatus').textContent='Tips: jawab dengan satu kalimat pendek. Tekan “Bicara” atau ketik jawaban.';showTurn();$('practice').scrollIntoView({behavior:'smooth',block:'start'})}
+function showTurn(){if(!current)return;let t=current.turns[step];if(!t){finishScenario();return}lastAI=t.q;bubble('AI',t.q);$('stepText').textContent=`${step} / ${current.turns.length}`;$('progress').style.width=(step/current.turns.length*100)+'%';$('feedback').className='feedback';$('feedback').innerHTML='';$('answer').focus()}
+function normalize(s){return s.toLowerCase().replace(/[’']/g,'').replace(/[^a-z0-9\s]/g,' ').replace(/\s+/g,' ').trim()}
+function submitAnswer(){if(!current)return;let raw=$('answer').value.trim();if(!raw){toast('Ketik jawaban atau gunakan mikrofon dulu, bro.');return}let t=current.turns[step];bubble('You',raw);let norm=normalize(raw);let matched=t.answers.some(a=>{let na=normalize(a);return norm.includes(na)||na.includes(norm)&&norm.length>3});let words=norm.split(' ').filter(Boolean).length;let quality=matched||words>=3;let fb=$('feedback');fb.className='feedback show';fb.innerHTML='';let title=document.createElement('strong');title.textContent=quality?'✅ Good try! Jawabanmu bisa dipahami.':'💪 Kita perbaiki bareng.';let p=document.createElement('div');p.textContent='Contoh jawaban: '+t.model;let tip=document.createElement('div');tip.style.marginTop='5px';tip.textContent='Tips: '+t.tip;fb.append(title,p,tip);let stats=loadStats();stats.xp=(stats.xp||0)+(quality?10:5);stats.day=todayKey;stats.today=(stats.today||0)+1;saveStats(stats);renderStats();if(quality)sessionCorrect++;$('answer').value='';step++;$('stepText').textContent=`${step} / ${current.turns.length}`;$('progress').style.width=(step/current.turns.length*100)+'%';$('sendBtn').disabled=true;$('micBtn').disabled=true;setTimeout(()=>{if(current){if(step>=current.turns.length)finishScenario();else showTurn();$('sendBtn').disabled=false;$('micBtn').disabled=false}},Math.min(5000,2600));}
+function finishScenario(){if(!current)return;let s=loadStats();s.completed=s.completed||[];if(!s.completed.includes(current.id)){s.completed.push(current.id);s.xp=(s.xp||0)+20;saveStats(s)}renderStats();bubble('AI',`Great work! You finished "${current.title}". You earned practice XP. Try another scenario, or repeat this one to get more confident.`);$('stepText').textContent=`${current.turns.length} / ${current.turns.length}`;$('progress').style.width='100%';$('feedback').className='feedback show';$('feedback').innerHTML='<strong>🏆 Skenario selesai!</strong><div>Ulangi lagi untuk melatih kelancaran, atau pilih skenario lain.</div>';$('sendBtn').disabled=true;$('micBtn').disabled=true}
+function hint(){if(!current)return;let t=current.turns[Math.min(step,current.turns.length-1)];if(!t)return;let fb=$('feedback');fb.className='feedback show';fb.innerHTML='';let strong=document.createElement('strong');strong.textContent='💡 Petunjuk bahasa Indonesia';let p=document.createElement('div');p.textContent=t.hint;let q=document.createElement('div');q.style.marginTop='6px';q.textContent='Coba susun sendiri dalam bahasa Inggris, lalu kirim.';fb.append(strong,p,q);let s=loadStats();s.xp=(s.xp||0);saveStats(s)}
+function repeatScenario(){if(current)startScenario(current.id)}
+function back(){current=null;$('practice').classList.remove('active');$('sendBtn').disabled=false;$('micBtn').disabled=false;$('scenarioList').scrollIntoView({behavior:'smooth',block:'start'})}
+function startMic(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){$('micStatus').textContent='Pengenalan suara tidak didukung browser ini. Coba Chrome terbaru atau ketik jawaban.';toast('Speech recognition tidak tersedia di browser ini.');return}try{recognition=new SR();recognition.lang='en-US';recognition.interimResults=false;recognition.maxAlternatives=1;$('micBtn').disabled=true;$('micStatus').textContent='Mendengarkan... silakan bicara dalam bahasa Inggris.';recognition.onresult=e=>{$('answer').value=e.results[0][0].transcript;$('micStatus').textContent='Terdeteksi: '+e.results[0][0].transcript};recognition.onerror=e=>{$('micStatus').textContent='Mikrofon: '+e.error+'. Cek izin mikrofon atau ketik jawaban.';$('micBtn').disabled=false};recognition.onend=()=>{$('micBtn').disabled=false};recognition.start()}catch(e){$('micBtn').disabled=false;$('micStatus').textContent='Tidak bisa memulai mikrofon. Pastikan izin mikrofon aktif.'}}
+function toast(msg){$('toast').textContent=msg;$('toast').classList.add('show');setTimeout(()=>$('toast').classList.remove('show'),2600)}
+$('sendBtn').addEventListener('click',submitAnswer);$('answer').addEventListener('keydown',e=>{if(e.key==='Enter')submitAnswer()});$('micBtn').addEventListener('click',startMic);$('speakBtn').addEventListener('click',()=>say(lastAI));$('hintBtn').addEventListener('click',hint);$('repeatBtn').addEventListener('click',repeatScenario);$('backBtn').addEventListener('click',back);$('continueBtn').addEventListener('click',()=>{if(current){$('practice').scrollIntoView({behavior:'smooth'});return}$('scenarioList').scrollIntoView({behavior:'smooth',block:'start'})});
+renderScenarios();renderStats();
+</script>
+</body>
+</html>
